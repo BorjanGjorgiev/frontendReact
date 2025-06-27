@@ -95,7 +95,7 @@ function Groups() {
 
   return (
     <>
-      <Button className="m-5">Create new Group</Button>
+     <Link to={"/groups/create"}><Button className="m-5">Create new Group</Button></Link>
       <Table dataSource={groups} columns={columns} rowKey="id" />
       <Modal
         title="Add User to Group"

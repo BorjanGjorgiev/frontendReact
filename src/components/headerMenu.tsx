@@ -40,7 +40,8 @@ function HeaderMenu()
           <Menu.Item key="home">Home</Menu.Item>
           <Menu.Item key="about">About Us</Menu.Item>
         <Link to="/api/users" > <Menu.Item key="users">Users</Menu.Item></Link> 
-        <Link to="/api/groups"><Menu.Item key="groups">Groups</Menu.Item></Link>  
+        <Link to="/api/groups"><Menu.Item key="groups">Groups</Menu.Item></Link>
+        <Link to="/api/logs"><Menu.Item key="logs">Logs</Menu.Item></Link>  
           <Menu.Item key="contact">Contact Us</Menu.Item>
 
           <Menu.Item key="account">

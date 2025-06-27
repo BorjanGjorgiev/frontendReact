@@ -1,4 +1,5 @@
 
+import { Table } from "antd";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { groupDetail } from "../api/groupApi/groupApi";
@@ -46,14 +47,12 @@ function GroupDetails()
       },
   ]
    
-   return(<div className="flex flex-col justify-center align-items">
-    <h1>Group: {group.groupName}</h1>
-    <p>Created At: {group.createdAt}</p>
-    <p>Users:</p>
+   return(<div className=" flex-col justify-center align-center">
+    <h1 className="text-3xl font-bold">Group: {group.groupName}</h1>
+    <p className="text-3xl font-bold">Created At: {group.createdAt}</p>
+    <p className="text-3xl font-bold">Users:</p>
     <div>
-        {group.users.map((l)=>(<ul>
-            <li>{l.firstName} {l.lastName} - {l.email}</li>
-        </ul>))}
+       <Table dataSource={group.users} columns={columns}></Table>
     </div>
 
    </div>)

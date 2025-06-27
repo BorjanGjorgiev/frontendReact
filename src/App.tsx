@@ -7,8 +7,8 @@ import LoginPage from './components/loginPage';
 import Users from './components/users';
 import Groups from './components/groups';
 import GroupDetails from './components/groupDetails';
-
-
+import UserLogs from './components/userLogs';
+import CreateGroup from './components/createGroup';
 function App() {
   return (
     <Routes>
@@ -19,6 +19,8 @@ function App() {
         <Route path="api/users" element={<Users/>}/>
         <Route path="/api/groups" element={<Groups/>}/>
         <Route path="/groups/:id" element={<GroupDetails />} />
+        <Route path="/api/logs" element={<UserLogs/>}/>
+        <Route path="/groups/create" element={<CreateGroup/>}/>
       </Route>
       <Route element={<RegisterLayout/>}>
       </Route>
