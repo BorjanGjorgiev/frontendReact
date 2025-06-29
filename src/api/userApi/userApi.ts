@@ -4,9 +4,11 @@ import { User } from '../../components/reusable/User'; // Adjust the import path
 const BASE_URL = 'http://localhost:8080/api/users';
 
 export const fetchUsers = async (): Promise<User[]> => {
-  const response = await fetch(BASE_URL);
-  if (!response.ok) throw new Error('Failed to fetch users');
-  return await response.json();
+  const response = await axios.get(BASE_URL);
+  return response.data.map((user: any) => ({
+    ...user,
+    group: user.group ?? null, // ensure group is at least null, not undefined
+  }));
 };
 
 export const deleteUser = async (id: number): Promise<void> => {

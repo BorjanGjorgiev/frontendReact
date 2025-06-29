@@ -8,6 +8,6 @@ export interface User
     email:string,
     isAvailable:boolean
     role:string,
-    group:Group,
+    group?: Group | null
     createdAt:string
 }
