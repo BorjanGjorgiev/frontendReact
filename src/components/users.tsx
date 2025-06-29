@@ -77,7 +77,7 @@ function Users() {
 
     const handleAvailabilityChange = (checked: boolean, user: User) => {
         console.log(`User ${user.email} availability changed to: ${checked}`);
-      
+
     };
 
     if (loading) return <p>Loading...</p>;
