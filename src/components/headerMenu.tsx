@@ -3,14 +3,33 @@ import { Header } from "antd/es/layout/layout";
 import Icon from '@mdi/react';
 import { mdiBank } from '@mdi/js';
 import { DownOutlined } from '@ant-design/icons';
-import { Link } from "react-router-dom";
-const items = [
-    { label: 'Profile', key: 'item-1' },
-    { label: 'Change Password', key: 'item-2' },  
-    { label: 'Signout', key: 'item-3' },
-  ];
+import {Link, useNavigate} from "react-router-dom";
+
 function HeaderMenu()
 {
+
+    const handleSignOut = async () => {
+    try {
+        await fetch("http://localhost:8080/api/auth/signOut", {
+            method: "POST",
+            credentials: "include", // send cookies
+        });
+        // Optionally clear frontend state here
+        navigate("/login"); // redirect after sign-out
+    } catch (err) {
+        console.error("Failed to sign out", err);
+    }
+};
+
+    const items = [
+    { label: <Link to="/api/auth/me">My Profile</Link>, key: 'item-1' },
+    { label: <Link to="/api/auth/change-password">Change Password</Link>, key: 'item-2'},
+    { label: <span onClick={handleSignOut}>Sign Out</span>,
+        key: 'item-3',},
+];
+    const navigate = useNavigate();
+
+
     return(
         <Header
         className="w-full h-150 flex "
