@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Input, Button, Checkbox, message } from 'antd';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 type LoginFormValues = {
   email: string;
@@ -24,11 +25,12 @@ const login = async (data: LoginFormValues): Promise<LoginResponse> => {
 
 function LoginPage() {
   const [form] = Form.useForm();
-
+  const navigate=useNavigate();
   const mutation = useMutation({
     mutationFn: login,
     onSuccess: () => {
       message.success('Успешно најавување!');
+      navigate('/api/users')
     },
     onError: (error: unknown) => {
       if (axios.isAxiosError(error)) {

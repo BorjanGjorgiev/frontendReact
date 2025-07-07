@@ -1,7 +1,8 @@
 import React from 'react';
 import { Form, Input, Button, message } from 'antd';
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 interface RegisterFormValues {
   firstName: string;
@@ -18,11 +19,14 @@ const registerUser = async (data: Omit<RegisterFormValues, 'confirmPassword'>) =
 
 function RegisterPage() {
   const [form] = Form.useForm();
+  const navigate=useNavigate();
 
-  const mutation = useMutation(registerUser, {
+  const mutation = useMutation({
+    mutationFn: registerUser,
     onSuccess: () => {
       message.success('Регистрацијата беше успешна! Можете да се најавите.');
       form.resetFields();
+      navigate('/api/auth/login');
     },
     onError: (error: any) => {
       if (axios.isAxiosError(error)) {
@@ -48,6 +52,9 @@ function RegisterPage() {
     const { firstName, lastName, email, password } = values;
     mutation.mutate({ firstName, lastName, email, password });
   };
+
+
+ 
 
   return (
       <Form
@@ -77,8 +84,8 @@ function RegisterPage() {
             name="email"
             label="Е-пошта"
             rules={[
-              { required: true, message: 'Внеси ја твојата е-пошта' },
-              { type: 'email', message: 'Внеси валидна е-пошта' },
+              { required: true, message: 'Внеси ја твојата е-пошта'},
+              { type: 'email', message: 'Внеси валидна е-пошта'},
             ]}
             validateTrigger="onSubmit"
         >
@@ -118,7 +125,7 @@ function RegisterPage() {
           <Button
               type="primary"
               htmlType="submit"
-              loading={mutation.isLoading}
+              
               style={{ width: '100%' }}
           >
             Регистрирај се

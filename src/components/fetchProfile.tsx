@@ -1,20 +1,17 @@
-// UserProfile.tsx
+
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Descriptions, Avatar, Tag, Spin, Alert } from "antd";
 import { User } from "./reusable/User";
+import axios from "axios";
 
-// Fetch функција
+
 const fetchUserProfile = async (): Promise<User> => {
-    const res = await fetch("http://localhost:8080/api/users/me", {
-        credentials: "include", // овозможува праќање на JWT cookie
+    const res = await axios.get<User>("http://localhost:8080/api/auth/me", {
+        withCredentials: true,
     });
 
-    if (!res.ok) {
-        throw new Error("Не може да се вчита профилот");
-    }
-
-    return res.json();
+    return res.data;
 };
 
 export function FetchUserProfile() {
