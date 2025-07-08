@@ -12,7 +12,7 @@ interface RegisterFormValues {
   confirmPassword: string;
 }
 
-const registerUser = async (data: Omit<RegisterFormValues, 'confirmPassword'>) => {
+export const registerUser = async (data: Omit<RegisterFormValues, 'confirmPassword'>) => {
   const response = await axios.post('http://localhost:8080/api/auth/register', data);
   return response.data;
 };

@@ -4,18 +4,22 @@ import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-type LoginFormValues = {
+export type LoginFormValues = {
   email: string;
   password: string;
-  remember?: boolean;
+  
 };
 
-type LoginResponse = {
+export type LoginResponse = {
+  firstName:string,
+  lastName:string,
+  login:string,
   token: string;
 };
 
-const login = async (data: LoginFormValues): Promise<LoginResponse> => {
-  const response = await axios.post<LoginResponse>(
+export const login = async (data: LoginFormValues): Promise<LoginResponse> => {
+  const response = await axios.post<LoginResponse>
+  (
       'http://localhost:8080/api/auth/login',
       data,
       { withCredentials: true }
@@ -71,9 +75,7 @@ function LoginPage() {
             <Input.Password />
           </Form.Item>
 
-          <Form.Item name="remember" valuePropName="checked" noStyle>
-            <Checkbox>Запамети ме</Checkbox>
-          </Form.Item>
+         
 
           <Form.Item>
             <Button
