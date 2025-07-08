@@ -1,56 +1,19 @@
 import React from 'react';
-import { Form, Input, Button, Checkbox, message } from 'antd';
-import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-
-export type LoginFormValues = {
-  email: string;
-  password: string;
-  
-};
-
-export type LoginResponse = {
-  firstName:string,
-  lastName:string,
-  login:string,
-  token: string;
-};
-
-export const login = async (data: LoginFormValues): Promise<LoginResponse> => {
-  const response = await axios.post<LoginResponse>
-  (
-      'http://localhost:8080/api/auth/login',
-      data,
-      { withCredentials: true }
-  );
-  return response.data;
-};
+import { Form, Input, Button, message } from 'antd';
+import { useAuth } from '../context/userAuth';
+import { LoginFormValues } from './reusable/LoginFormValues';
 
 function LoginPage() {
   const [form] = Form.useForm();
-  const navigate=useNavigate();
-  const mutation = useMutation({
-    mutationFn: login,
-    onSuccess: () => {
-      message.success('Успешно најавување!');
-      navigate('/api/users')
-    },
-    onError: (error: unknown) => {
-      if (axios.isAxiosError(error)) {
-        if (error.response?.status === 401) {
-          message.error('Невалидна е-пошта или лозинка');
-        } else {
-          message.error('Грешка при најавување');
-        }
-      } else {
-        message.error('Грешка при конекција');
-      }
-    },
-  });
+  const { loginUser } = useAuth();
 
-  const onFinish = (values: LoginFormValues) => {
-    mutation.mutate(values);
+  const onFinish = async (values: LoginFormValues) => {
+    try {
+      await loginUser(values.email, values.password);
+
+    } catch (error) {
+      message.error('Неуспешна најава');
+    }
   };
 
   return (
@@ -75,14 +38,8 @@ function LoginPage() {
             <Input.Password />
           </Form.Item>
 
-         
-
           <Form.Item>
-            <Button
-                type="primary"
-                htmlType="submit"
-                style={{ width: '100%' }}
-            >
+            <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
               Најави се
             </Button>
           </Form.Item>

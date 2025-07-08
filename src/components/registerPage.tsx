@@ -1,60 +1,20 @@
-import React from 'react';
-import { Form, Input, Button, message } from 'antd';
-import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-
-interface RegisterFormValues {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
-
-export const registerUser = async (data: Omit<RegisterFormValues, 'confirmPassword'>) => {
-  const response = await axios.post('http://localhost:8080/api/auth/register', data);
-  return response.data;
-};
+import {Button, Form, Input} from "antd";
+import { useAuth } from "../context/userAuth";
+import {RegisterFormValues} from "./reusable/RegisterFormValues";
 
 function RegisterPage() {
   const [form] = Form.useForm();
-  const navigate=useNavigate();
+  const { registerUser } = useAuth(); // 👈 Use the context
 
-  const mutation = useMutation({
-    mutationFn: registerUser,
-    onSuccess: () => {
-      message.success('Регистрацијата беше успешна! Можете да се најавите.');
-      form.resetFields();
-      navigate('/api/auth/login');
-    },
-    onError: (error: any) => {
-      if (axios.isAxiosError(error)) {
-        if (error.response?.status === 400) {
-          const errorMsg = error.response.data || 'Грешка при регистрација';
-          message.error(errorMsg);
-          form.setFields([
-            {
-              name: 'email',
-              errors: [errorMsg],
-            },
-          ]);
-        } else {
-          message.error('Се појави грешка. Обиди се повторно.');
-        }
-      } else {
-        message.error('Грешка при конекција');
-      }
-    },
-  });
+  const onFinish = async (values: RegisterFormValues) => {
+    const { firstName, lastName, email, password, confirmPassword } = values;
 
-  const onFinish = (values: RegisterFormValues) => {
-    const { firstName, lastName, email, password } = values;
-    mutation.mutate({ firstName, lastName, email, password });
+    // Call registerUser from context
+    await registerUser(firstName, lastName, email, password, confirmPassword);
+
+    // Optionally reset the form (if registration was successful)
+    form.resetFields();
   };
-
-
- 
 
   return (
       <Form
@@ -84,10 +44,9 @@ function RegisterPage() {
             name="email"
             label="Е-пошта"
             rules={[
-              { required: true, message: 'Внеси ја твојата е-пошта'},
-              { type: 'email', message: 'Внеси валидна е-пошта'},
+              { required: true, message: 'Внеси ја твојата е-пошта' },
+              { type: 'email', message: 'Внеси валидна е-пошта' },
             ]}
-            validateTrigger="onSubmit"
         >
           <Input />
         </Form.Item>
@@ -122,17 +81,12 @@ function RegisterPage() {
         </Form.Item>
 
         <Form.Item>
-          <Button
-              type="primary"
-              htmlType="submit"
-              
-              style={{ width: '100%' }}
-          >
+          <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
             Регистрирај се
           </Button>
         </Form.Item>
       </Form>
   );
-};
+}
 
 export default RegisterPage;

@@ -2,15 +2,13 @@ import { mdiToaster } from "@mdi/js";
 import { message } from "antd";
 import React, { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { login, LoginFormValues } from "../components/loginPage";
-import { registerUser } from "../components/registerPage";
+
+import {UserProfile} from "../components/reusable/UserProfile";
+import {login} from "../api/Login/login";
+import {registerUser} from "../api/Login/Register/register";
 
 
-interface UserProfile {
-    firstName: string;
-    lastName: string;
-    email: string;
-  }
+
 
 type UserContextType = {
   user: UserProfile | null;
